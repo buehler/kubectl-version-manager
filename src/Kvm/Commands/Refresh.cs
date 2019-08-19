@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Kurukuru;
 using Kvm.Application;
 using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
@@ -29,9 +30,12 @@ namespace Kvm.Commands
             var definition = new[] { new { tag_name = "" } };
             var versions = new List<SemVersion>();
 
+            using var spinner = new Spinner("Refresh kubectl versions.");
+            spinner.Start();
+
             while (url != null)
             {
-                Console.WriteLine($"Getting versions: {url}.");
+                spinner.Text = $"Refresh kubectl versions from: {url}";
                 var response = await _client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
 
@@ -55,6 +59,7 @@ namespace Kvm.Commands
                     .FirstOrDefault();
             }
 
+            spinner.Succeed();
             await DataCache.SetKubectlVersions(versions);
             Console.WriteLine("Local version cache updated.");
 

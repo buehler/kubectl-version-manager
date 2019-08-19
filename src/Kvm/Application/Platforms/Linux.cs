@@ -45,7 +45,7 @@ namespace Kvm.Application.Platforms
             await CreateSymlink(kubectlFile, KubectlLinkPosition);
         }
 
-        private Task CreateSymlink(string targetFile, string link) =>
+        private static Task CreateSymlink(string targetFile, string link) =>
             Task.Run(
                 () =>
                 {

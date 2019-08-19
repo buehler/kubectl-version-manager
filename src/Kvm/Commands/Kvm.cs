@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Kvm.Application;
 using McMaster.Extensions.CommandLineUtils;
@@ -17,9 +16,9 @@ namespace Kvm.Commands
     {
         public async Task<int> OnExecuteAsync(CommandLineApplication app)
         {
-            app.ShowHelp(false);
             var version = await DataCache.GetKubectlVersionInUse();
-            Console.WriteLine($"Actual version in use: {version}");
+            app.ExtendedHelpText = $"Actual version in use: {version}";
+            app.ShowHelp(false);
             return 1;
         }
     }
