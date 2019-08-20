@@ -59,11 +59,10 @@ namespace Kvm.Commands
                     .FirstOrDefault();
             }
 
-            spinner.Succeed();
             await DataCache.SetKubectlVersions(versions);
-            Console.WriteLine("Local version cache updated.");
+            spinner.Succeed("Local version cache updated.");
 
-            return 0;
+            return ExitCodes.Success;
         }
     }
 }

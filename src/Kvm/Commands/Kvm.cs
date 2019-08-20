@@ -19,7 +19,7 @@ namespace Kvm.Commands
             var version = await DataCache.GetKubectlVersionInUse();
             app.ExtendedHelpText = $"Actual version in use: {version}";
             app.ShowHelp(false);
-            return 1;
+            return ExitCodes.Error;
         }
     }
 }

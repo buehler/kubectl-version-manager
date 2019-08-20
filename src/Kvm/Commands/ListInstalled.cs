@@ -16,7 +16,7 @@ namespace Kvm.Commands
                 Console.WriteLine(version.ToString());
             }
 
-            return Task.FromResult(0);
+            return Task.FromResult(ExitCodes.Success);
         }
     }
 }

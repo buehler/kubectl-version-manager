@@ -20,7 +20,7 @@ namespace Kvm.Commands
                 await pager.Writer.WriteLineAsync(version.ToString());
             }
 
-            return 0;
+            return ExitCodes.Success;
         }
     }
 }
