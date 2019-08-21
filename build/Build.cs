@@ -39,10 +39,10 @@ class Build : NukeBuild
         .Before(Restore)
         .Executes(() =>
         {
-            DotNetClean(s => s.SetProject(Solution));
             SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
+            DotNetClean(s => s.SetProject(Solution));
         });
 
     Target Restore => _ => _
@@ -61,7 +61,7 @@ class Build : NukeBuild
         );
 
     Target Publish => _ => _
-        .DependsOn(Clean, Compile)
+        .DependsOn(Clean, Restore, Compile)
         .Executes(() => DotNetPublish(s => s
             .SetProject(Solution)
             .SetConfiguration(Configuration)

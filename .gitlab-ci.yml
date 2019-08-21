@@ -1,0 +1,14 @@
+stages:
+  - release
+
+release:
+  stage: release
+  image: smartive/semantic-release-image
+  variables:
+    DOTNET_INSTALL_SKIP_PREREQS: 1
+  script:
+    - apk update
+    - apk add bash curl libstdc++ libunwind libintl icu-libs openssl
+    - npx semantic-release
+  only:
+    - master
