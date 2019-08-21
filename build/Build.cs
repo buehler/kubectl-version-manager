@@ -5,6 +5,7 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Utilities.Collections;
+using Semver;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -23,13 +24,16 @@ class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
+    [Parameter("Version number that is built.")]
+    readonly string Version = "0.0.0";
+
     [Solution] readonly Solution Solution;
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath TestsDirectory => RootDirectory / "tests";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
-    IEnumerable<string> Runtimes = new[] { "linux-x64", "linux-musl-x64", "win10-x64", "osx-x64" };
+    IEnumerable<string> Runtimes = new[] { "linux-x64", "linux-musl-x64", "osx-x64" };
 
     Target Clean => _ => _
         .Before(Restore)
@@ -62,9 +66,17 @@ class Build : NukeBuild
             .SetProject(Solution)
             .SetConfiguration(Configuration)
             .AddProperty("PublishSingleFile", true)
+            .SetVersion(Version)
+            .SetAssemblyVersion(Version)
+            .SetFileVersion(Version)
+            .SetInformationalVersion(Version)
             .CombineWith(
                 Runtimes,
                 (settings, runtime) => settings
                     .SetRuntime(runtime)
                     .SetOutput(ArtifactsDirectory / runtime))));
+
+    Target Ci => _ => _
+        .OnlyWhenStatic(() => Version != "0.0.0" && SemVersion.Parse(Version, true) != null)
+        .DependsOn(Publish);
 }
