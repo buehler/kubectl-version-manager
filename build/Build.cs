@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ICSharpCode.SharpZipLib.Zip;
 using Nuke.Common;
 using Nuke.Common.Execution;
 using Nuke.Common.ProjectModel;
@@ -24,8 +25,7 @@ class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Parameter("Version number that is built.")]
-    readonly string Version = "0.0.0";
+    [Parameter("Version number that is built.")] readonly string Version = "0.0.0";
 
     [Solution] readonly Solution Solution;
 
@@ -78,5 +78,18 @@ class Build : NukeBuild
 
     Target Ci => _ => _
         .OnlyWhenStatic(() => Version != "0.0.0" && SemVersion.Parse(Version, true) != null)
-        .DependsOn(Publish);
+        .DependsOn(Publish)
+        .Executes(() =>
+        {
+            var zip = new FastZip();
+            foreach (var runtime in Runtimes)
+            {
+                Logger.Info($"Create zip for {runtime} v{Version}.");
+                zip.CreateZip(
+                    $"{ArtifactsDirectory / runtime}-v{Version}.zip",
+                    ArtifactsDirectory / runtime,
+                    false,
+                    "-.pdb");
+            }
+        });
 }

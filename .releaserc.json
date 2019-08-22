@@ -12,16 +12,7 @@
       "path": "@semantic-release/github",
       "assets": [
         {
-          "path": "artifacts/linux-musl-x64/kvm",
-          "label": "KVM Linux musl x64 (alpine and co)"
-        },
-        {
-          "path": "artifacts/linux-x64/kvm",
-          "label": "KVM Linux x64"
-        },
-        {
-          "path": "artifacts/osx-x64/kvm",
-          "label": "KVM macOS x64"
+          "path": "artifacts/*.zip"
         }
       ]
     }

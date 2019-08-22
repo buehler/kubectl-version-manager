@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Nuke.Common" Version="0.21.2" />
     <PackageReference Include="Semver" Version="2.0.4" />
+    <PackageReference Include="SharpZipLib" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
