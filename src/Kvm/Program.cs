@@ -24,6 +24,9 @@ namespace Kvm
                 case true when RuntimeInformation.IsOSPlatform(OSPlatform.OSX):
                     services.AddTransient<IPlatform, MacOs>();
                     break;
+                case true when RuntimeInformation.IsOSPlatform(OSPlatform.Windows):
+                    services.AddTransient<IPlatform, Windows>();
+                    break;
                 default:
                     throw new NotSupportedException("OS not supported.");
             }
