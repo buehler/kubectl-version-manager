@@ -9,13 +9,21 @@
         <AssemblyName>kvm</AssemblyName>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <DefineConstants Condition="'$(Configuration)' == 'Debug' Or '$(RuntimeIdentifier)' == 'win-x64'">WINDOWS</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Release' And '$(RuntimeIdentifier)' != 'win-x64'">
+        <Compile Remove="Application\Platforms\Windows.cs" />
+    </ItemGroup>
+
     <ItemGroup>
-        <PackageReference Include="Kurukuru" Version="1.1.0"/>
-        <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.4.0-beta.81"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0-preview7.19362.4"/>
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.2"/>
-        <PackageReference Include="Semver" Version="2.0.4"/>
-        <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.5.0" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'"/>
+        <PackageReference Include="Kurukuru" Version="1.1.0" />
+        <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.4.0-beta.81" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0-preview7.19362.4" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+        <PackageReference Include="Semver" Version="2.0.4" />
+        <PackageReference Include="System.IO.FileSystem.AccessControl" Version="4.5.0" Condition="'$(Configuration)' == 'Debug' Or '$(RuntimeIdentifier)' == 'win-x64'" />
     </ItemGroup>
 
 </Project>

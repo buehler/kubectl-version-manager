@@ -33,7 +33,7 @@ class Build : NukeBuild
     AbsolutePath TestsDirectory => RootDirectory / "tests";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
-    IEnumerable<string> Runtimes = new[] { "linux-x64", "linux-musl-x64", "osx-x64" };
+    IEnumerable<string> Runtimes = new[] { "linux-x64", "linux-musl-x64", "osx-x64", "win-x64" };
 
     Target Clean => _ => _
         .Before(Restore)
@@ -42,7 +42,7 @@ class Build : NukeBuild
             SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
-            DotNetClean(s => s.SetProject(Solution));
+            DotNetClean(s => s.SetProject(Solution).SetConfiguration(Configuration));
         });
 
     Target Restore => _ => _
@@ -61,7 +61,7 @@ class Build : NukeBuild
         );
 
     Target Publish => _ => _
-        .DependsOn(Clean, Restore, Compile)
+        .DependsOn(Clean)
         .Executes(() => DotNetPublish(s => s
             .SetProject(Solution)
             .SetConfiguration(Configuration)
