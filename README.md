@@ -7,6 +7,7 @@ Right now, the following operating systems are supported:
 - linux x64
 - musl based linux x64
 - mac os x64
+- windows x64
 
 To use the manager, download the most recent version from the releases page and put it somewhere
 in your system where you can access it (i.e. where it is in the \$PATH variable.).
